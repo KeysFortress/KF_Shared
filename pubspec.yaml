@@ -2,6 +2,7 @@ name: shared
 description: "A new Flutter package project."
 version: 0.0.1
 homepage:
+publish_to: 'none'
 
 environment:
   sdk: '>=3.3.0-185.0.dev <4.0.0'
@@ -12,6 +13,8 @@ dependencies:
     sdk: flutter
   infrastructure:
     path: "../KF_Infrastructure"
+  application:
+    path: "../KF_Application"
   stacked: ^3.4.1+1
 
   get_it: ^7.2.0
