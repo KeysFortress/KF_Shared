@@ -2,10 +2,12 @@ import 'package:domain/models/component_action.dart';
 import 'package:flutter/material.dart';
 
 class BaseComponentToggle extends ComponentActionViewModel {
-  BaseComponentToggle(
-      BuildContext context, String currentIcon, String currentText) {
+  late Function callback;
+  BaseComponentToggle(BuildContext context, String currentIcon,
+      String currentText, Function onAction) {
     _statusMessage = currentText;
     _currentIcon = currentIcon;
+    callback = onAction;
   }
 
   bool _isActive = false;
@@ -30,6 +32,6 @@ class BaseComponentToggle extends ComponentActionViewModel {
 
   @override
   onPresssed() {
-    notifyListeners();
+    callback.call();
   }
 }
