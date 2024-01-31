@@ -4,12 +4,13 @@ import 'package:infrastructure/interfaces/iobserver.dart';
 import 'package:infrastructure/interfaces/ipage_router_service.dart';
 import 'package:localization/localization.dart';
 import 'package:stacked/stacked.dart';
+import 'package:shared/locator.dart' as locator;
 
 class PageViewModel extends BaseViewModel {
-  GetIt getIt = GetIt.instance;
+  GetIt getIt = locator.getIt;
   late BuildContext pageContext;
-  late IPageRouterService router = getIt.get<IPageRouterService>();
-  late IObserver observer = getIt.get<IObserver>();
+  late IPageRouterService router = locator.getIt.get<IPageRouterService>();
+  late IObserver observer = locator.getIt.get<IObserver>();
 
   PageViewModel(BuildContext context) {
     FocusScope.of(context).unfocus();
