@@ -30,53 +30,53 @@ void registerDependency() async {
   getIt.registerSingleton<IExceptionManager>(ExceptionManager());
   getIt.registerSingleton<IObserver>(Observer());
   getIt.registerLazySingleton<IPageRouterService>(() {
-    IObserver observer = getIt<IObserver>();
+    IObserver observer = getIt.get<IObserver>();
     return PageRouterService(observer);
   });
   getIt.registerSingleton<IlocalStorage>(LocalStorage());
   getIt.registerSingleton<ISignatureService>(SignatureService());
   getIt.registerLazySingleton<IConfiguration>(() {
-    IlocalStorage localStorage = getIt<IlocalStorage>();
+    IlocalStorage localStorage = getIt.get<IlocalStorage>();
     var config = Configuration(storage: localStorage);
     config.getConfig().then((value) => config.config = value);
     return config;
   });
   getIt.registerLazySingleton<ISecretManager>(
     () {
-      IlocalStorage _storage = getIt<IlocalStorage>();
+      IlocalStorage storage = getIt.get<IlocalStorage>();
       return SecretManger(
-        localStorage: _storage,
+        localStorage: storage,
       );
     },
   );
   getIt.registerLazySingleton<IIdentityManager>(
     () {
-      IlocalStorage _storage = getIt<IlocalStorage>();
-      ISignatureService signatureService = getIt<ISignatureService>();
+      IlocalStorage storage0 = getIt.get<IlocalStorage>();
+      ISignatureService signatureService = getIt.get<ISignatureService>();
       return IdentityManager(
         signatureService,
-        _storage,
+        storage0,
       );
     },
   );
   getIt.registerLazySingleton<ISignatureStore>(
     () {
-      IlocalStorage _storage = getIt<IlocalStorage>();
-      return SignatureStore(_storage);
+      IlocalStorage storage1 = getIt.get<IlocalStorage>();
+      return SignatureStore(storage1);
     },
   );
 
   getIt.registerLazySingleton<IAuthenticationService>(
     () {
-      IHttpProviderService _provider = getIt<IHttpProviderService>();
-      return AuthenticationService(_provider);
+      IHttpProviderService provider = getIt.get<IHttpProviderService>();
+      return AuthenticationService(provider);
     },
   );
 
   getIt.registerLazySingleton<IOtpService>(
     () {
-      IlocalStorage _storage = getIt<IlocalStorage>();
-      return OtpService(_storage);
+      IlocalStorage storage2 = getIt.get<IlocalStorage>();
+      return OtpService(storage2);
     },
   );
 }
