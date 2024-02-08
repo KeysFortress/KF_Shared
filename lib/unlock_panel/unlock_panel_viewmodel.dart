@@ -1,13 +1,30 @@
 import 'package:flutter/services.dart';
+import 'package:infrastructure/interfaces/iauthorization_service.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:shared/page_view_model.dart';
 import 'package:local_auth/error_codes.dart' as auth_error;
+import 'package:domain/models/enums.dart';
+import 'package:domain/models/transition_data.dart';
 
 class UnlockPanelViewModel extends PageViewModel {
+  late IAuthorizationService _authorizationService;
   final LocalAuthentication auth = LocalAuthentication();
-  UnlockPanelViewModel(super.context);
+  UnlockPanelViewModel(super.context) {
+    _authorizationService = getIt.get<IAuthorizationService>();
+  }
 
   ready() async {
+    var lockType = await _authorizationService.getDeviceLockType();
+    if (lockType == DeviceLockType.none) {
+      // ignore: use_build_context_synchronously
+      router.changePage(
+        "/setup-lock",
+        pageContext,
+        TransitionData(next: PageTransition.slideForward),
+      );
+      return;
+    }
+
     try {
       final bool didAuthenticate = await auth.authenticate(
           localizedReason: 'Please authenticate to show account balance',
