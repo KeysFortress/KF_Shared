@@ -10,7 +10,7 @@ class UnlockPanelView extends StatelessWidget {
     return ViewModelBuilder.reactive(
       viewModelBuilder: () => UnlockPanelViewModel(context),
       onViewModelReady: (viewModel) => viewModel.ready(),
-      builder: (context, viewModel, child) => Placeholder(),
+      builder: (context, viewModel, child) => viewModel.lockOption,
     );
   }
 }

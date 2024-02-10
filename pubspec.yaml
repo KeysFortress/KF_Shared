@@ -15,6 +15,8 @@ dependencies:
     path: "../KF_Infrastructure"
   application:
     path: "../KF_Application"
+  components:
+    path: "../KF_Components"
   stacked: ^3.4.1+1
   local_auth: ^2.1.8
   get_it: ^7.2.0
