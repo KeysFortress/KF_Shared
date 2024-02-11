@@ -362,6 +362,12 @@
       "languageVersion": "2.19"
     },
     {
+      "name": "pattern_lock",
+      "rootUri": "file:///home/kristifor/.pub-cache/hosted/pub.dev/pattern_lock-2.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "petitparser",
       "rootUri": "file:///home/kristifor/.pub-cache/hosted/pub.dev/petitparser-6.0.2",
       "packageUri": "lib/",
@@ -572,7 +578,7 @@
       "languageVersion": "3.3"
     }
   ],
-  "generated": "2024-02-10T20:54:32.784715Z",
+  "generated": "2024-02-11T10:07:47.315413Z",
   "generator": "pub",
   "generatorVersion": "3.3.0-185.0.dev"
 }

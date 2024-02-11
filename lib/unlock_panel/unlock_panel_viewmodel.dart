@@ -1,3 +1,4 @@
+import 'package:components/pattern_panel/pattern_panel.dart';
 import 'package:components/pin_code_panel/pin_code_panel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -25,6 +26,7 @@ class UnlockPanelViewModel extends PageViewModel {
       case DeviceLockType.password:
         _lockOption = const PinCodePanel();
       case DeviceLockType.pattern:
+        _lockOption = const PatternPanel();
       case DeviceLockType.totp:
         break;
 
