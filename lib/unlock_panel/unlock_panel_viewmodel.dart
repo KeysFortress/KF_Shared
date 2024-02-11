@@ -8,6 +8,7 @@ import 'package:shared/page_view_model.dart';
 import 'package:local_auth/error_codes.dart' as auth_error;
 import 'package:domain/models/enums.dart';
 import 'package:domain/models/transition_data.dart';
+import 'package:components/fill_totp_code/fill_totp_code.dart';
 
 class UnlockPanelViewModel extends PageViewModel {
   late IAuthorizationService _authorizationService;
@@ -28,6 +29,7 @@ class UnlockPanelViewModel extends PageViewModel {
       case DeviceLockType.pattern:
         _lockOption = const PatternPanel();
       case DeviceLockType.totp:
+        _lockOption = const FillTotpCode();
         break;
 
       case DeviceLockType.biometric:
