@@ -3,6 +3,7 @@ import 'package:application/implementations/configuration.dart';
 import 'package:application/implementations/exception_manager.dart';
 import 'package:application/implementations/http_provider.dart';
 import 'package:application/implementations/http_server.dart';
+import 'package:application/implementations/local_network_service.dart';
 import 'package:application/implementations/local_storage.dart';
 import 'package:application/implementations/observer.dart';
 import 'package:application/implementations/otp_service.dart';
@@ -19,6 +20,7 @@ import 'package:infrastructure/interfaces/iexception_manager.dart';
 import 'package:infrastructure/interfaces/ihttp_provider_service.dart';
 import 'package:infrastructure/interfaces/ihttp_server.dart';
 import 'package:infrastructure/interfaces/iidentity_manager.dart';
+import 'package:infrastructure/interfaces/ilocal_network_service.dart';
 import 'package:infrastructure/interfaces/ilocal_storage.dart';
 import 'package:infrastructure/interfaces/iobserver.dart';
 import 'package:infrastructure/interfaces/iotp_service.dart';
@@ -93,6 +95,12 @@ void registerDependency() async {
   getIt.registerLazySingleton<IHttpServer>(
     () {
       return HttpServer();
+    },
+  );
+  getIt.registerLazySingleton<ILocalNetworkService>(
+    () {
+      IHttpProviderService httpService = getIt.get<IHttpProviderService>();
+      return LocalNetworkService(httpService);
     },
   );
 }
