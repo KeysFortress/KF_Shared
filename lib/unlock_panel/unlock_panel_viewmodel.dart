@@ -49,10 +49,19 @@ class UnlockPanelViewModel extends PageViewModel {
 
   Future requestBiometric() async {
     try {
-      await auth.authenticate(
+      var result = await auth.authenticate(
         localizedReason: 'Please authenticate to show account balance',
         options: const AuthenticationOptions(useErrorDialogs: false),
       );
+
+      if (result) {
+        // ignore: use_build_context_synchronously
+        router.changePage(
+          "/passwords",
+          pageContext,
+          TransitionData(next: PageTransition.slideForward),
+        );
+      }
     } on PlatformException catch (e) {
       if (e.code == auth_error.notEnrolled) {
         // Add handling of no hardware here.
