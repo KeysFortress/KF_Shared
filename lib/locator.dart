@@ -94,7 +94,9 @@ void registerDependency() async {
   );
   getIt.registerLazySingleton<IHttpServer>(
     () {
-      return HttpServer();
+      ILocalNetworkService localNetworkService =
+          getIt.get<ILocalNetworkService>();
+      return HttpServer(localNetworkService);
     },
   );
   getIt.registerLazySingleton<ILocalNetworkService>(
