@@ -96,13 +96,17 @@ void registerDependency() async {
     () {
       ILocalNetworkService localNetworkService =
           getIt.get<ILocalNetworkService>();
-      return HttpServer(localNetworkService);
+      ISignatureService signatureService = getIt.get<ISignatureService>();
+      return HttpServer(localNetworkService, signatureService);
     },
   );
   getIt.registerLazySingleton<ILocalNetworkService>(
     () {
       IHttpProviderService httpService = getIt.get<IHttpProviderService>();
-      return LocalNetworkService(httpService);
+      ISignatureService signatureService = getIt.get<ISignatureService>();
+      IlocalStorage localStorage = getIt.get<IlocalStorage>();
+
+      return LocalNetworkService(httpService, signatureService, localStorage);
     },
   );
 }
