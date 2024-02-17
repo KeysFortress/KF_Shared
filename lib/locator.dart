@@ -105,7 +105,6 @@ void registerDependency() async {
       ILocalNetworkService localNetworkService =
           getIt.get<ILocalNetworkService>();
       ISignatureService signatureService = getIt.get<ISignatureService>();
-
       return HttpServer(localNetworkService, signatureService);
     },
   );
