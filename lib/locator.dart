@@ -39,6 +39,7 @@ void registerDependency() async {
     IObserver observer = getIt.get<IObserver>();
     return PageRouterService(observer);
   });
+
   getIt.registerSingleton<IlocalStorage>(LocalStorage());
   getIt.registerSingleton<ISignatureService>(SignatureService());
   getIt.registerLazySingleton<IConfiguration>(() {
@@ -47,6 +48,7 @@ void registerDependency() async {
     config.getConfig().then((value) => config.config = value);
     return config;
   });
+
   getIt.registerLazySingleton<ISecretManager>(
     () {
       IlocalStorage storage = getIt.get<IlocalStorage>();
@@ -55,6 +57,7 @@ void registerDependency() async {
       );
     },
   );
+
   getIt.registerLazySingleton<IIdentityManager>(
     () {
       IlocalStorage storage0 = getIt.get<IlocalStorage>();
@@ -65,6 +68,7 @@ void registerDependency() async {
       );
     },
   );
+
   getIt.registerLazySingleton<ISignatureStore>(
     () {
       IlocalStorage storage1 = getIt.get<IlocalStorage>();
@@ -82,27 +86,36 @@ void registerDependency() async {
   getIt.registerLazySingleton<IOtpService>(
     () {
       IlocalStorage storage2 = getIt.get<IlocalStorage>();
+
       return OtpService(storage2);
     },
   );
+
   getIt.registerLazySingleton<IAuthorizationService>(
     () {
       IlocalStorage storage = getIt.get<IlocalStorage>();
       IOtpService otpService = getIt.get<IOtpService>();
+
       return AutherizationService(otpService, storage);
     },
   );
+
   getIt.registerLazySingleton<IHttpServer>(
     () {
       ILocalNetworkService localNetworkService =
           getIt.get<ILocalNetworkService>();
-      return HttpServer(localNetworkService);
+      ISignatureService signatureService = getIt.get<ISignatureService>();
+
+      return HttpServer(localNetworkService, signatureService);
     },
   );
   getIt.registerLazySingleton<ILocalNetworkService>(
     () {
       IHttpProviderService httpService = getIt.get<IHttpProviderService>();
-      return LocalNetworkService(httpService);
+      ISignatureService signatureService = getIt.get<ISignatureService>();
+      IlocalStorage localStorage = getIt.get<IlocalStorage>();
+
+      return LocalNetworkService(httpService, signatureService, localStorage);
     },
   );
 }
