@@ -13,6 +13,7 @@ import 'package:application/implementations/signature_service.dart';
 import 'package:application/implementations/identity_manager.dart';
 import 'package:application/implementations/signature_store.dart';
 import 'package:application/implementations/authentication_service.dart';
+import 'package:application/implementations/challanage_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:infrastructure/interfaces/iauthorization_service.dart';
 import 'package:infrastructure/interfaces/iconfiguration.dart';
@@ -29,12 +30,15 @@ import 'package:infrastructure/interfaces/isecret_manager.dart';
 import 'package:infrastructure/interfaces/isignature_service.dart';
 import 'package:infrastructure/interfaces/isignature_store.dart';
 import 'package:infrastructure/interfaces/iauthentication_service.dart';
+import 'package:infrastructure/interfaces/ichallanage_service.dart';
 
 GetIt getIt = GetIt.I;
 void registerDependency() async {
   getIt.registerSingleton<IHttpProviderService>(HttpProvider());
   getIt.registerSingleton<IExceptionManager>(ExceptionManager());
   getIt.registerSingleton<IObserver>(Observer());
+  getIt.registerSingleton<IChallangeService>(ChallangeService());
+
   getIt.registerLazySingleton<IPageRouterService>(() {
     IObserver observer = getIt.get<IObserver>();
     return PageRouterService(observer);
@@ -105,7 +109,9 @@ void registerDependency() async {
       ILocalNetworkService localNetworkService =
           getIt.get<ILocalNetworkService>();
       ISignatureService signatureService = getIt.get<ISignatureService>();
-      return HttpServer(localNetworkService, signatureService);
+      IChallangeService challangeService = getIt.get<IChallangeService>();
+      return HttpServer(
+          localNetworkService, signatureService, challangeService);
     },
   );
   getIt.registerLazySingleton<ILocalNetworkService>(
