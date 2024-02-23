@@ -1,5 +1,6 @@
 import 'package:application/implementations/autherization_service.dart';
 import 'package:application/implementations/configuration.dart';
+import 'package:application/implementations/device_service.dart';
 import 'package:application/implementations/exception_manager.dart';
 import 'package:application/implementations/http_provider.dart';
 import 'package:application/implementations/http_server.dart';
@@ -18,6 +19,7 @@ import 'package:application/implementations/token_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:infrastructure/interfaces/iauthorization_service.dart';
 import 'package:infrastructure/interfaces/iconfiguration.dart';
+import 'package:infrastructure/interfaces/idevices_service.dart';
 import 'package:infrastructure/interfaces/iexception_manager.dart';
 import 'package:infrastructure/interfaces/ihttp_provider_service.dart';
 import 'package:infrastructure/interfaces/ihttp_server.dart';
@@ -136,6 +138,13 @@ void registerDependency() async {
       ILocalNetworkService localNetwork = getIt.get<ILocalNetworkService>();
 
       return TokenService(configuration, storage, localNetwork);
+    },
+  );
+  getIt.registerLazySingleton<IDevicesService>(
+    () {
+      IlocalStorage storage = getIt.get<IlocalStorage>();
+
+      return DeviceService(storage);
     },
   );
 }
