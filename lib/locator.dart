@@ -14,6 +14,7 @@ import 'package:application/implementations/identity_manager.dart';
 import 'package:application/implementations/signature_store.dart';
 import 'package:application/implementations/authentication_service.dart';
 import 'package:application/implementations/challanage_service.dart';
+import 'package:application/implementations/token_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:infrastructure/interfaces/iauthorization_service.dart';
 import 'package:infrastructure/interfaces/iconfiguration.dart';
@@ -31,6 +32,7 @@ import 'package:infrastructure/interfaces/isignature_service.dart';
 import 'package:infrastructure/interfaces/isignature_store.dart';
 import 'package:infrastructure/interfaces/iauthentication_service.dart';
 import 'package:infrastructure/interfaces/ichallanage_service.dart';
+import 'package:infrastructure/interfaces/itoken_service.dart';
 
 GetIt getIt = GetIt.I;
 void registerDependency() async {
@@ -103,15 +105,19 @@ void registerDependency() async {
       return AutherizationService(otpService, storage);
     },
   );
-
   getIt.registerLazySingleton<IHttpServer>(
     () {
       ILocalNetworkService localNetworkService =
           getIt.get<ILocalNetworkService>();
       ISignatureService signatureService = getIt.get<ISignatureService>();
       IChallangeService challangeService = getIt.get<IChallangeService>();
+      ITokenService tokenService = getIt.get<ITokenService>();
       return HttpServer(
-          localNetworkService, signatureService, challangeService);
+        localNetworkService,
+        signatureService,
+        challangeService,
+        tokenService,
+      );
     },
   );
   getIt.registerLazySingleton<ILocalNetworkService>(
@@ -121,6 +127,15 @@ void registerDependency() async {
       IlocalStorage localStorage = getIt.get<IlocalStorage>();
 
       return LocalNetworkService(httpService, signatureService, localStorage);
+    },
+  );
+  getIt.registerLazySingleton<ITokenService>(
+    () {
+      IConfiguration configuration = getIt.get<IConfiguration>();
+      IlocalStorage storage = getIt.get<IlocalStorage>();
+      ILocalNetworkService localNetwork = getIt.get<ILocalNetworkService>();
+
+      return TokenService(configuration, storage, localNetwork);
     },
   );
 }
