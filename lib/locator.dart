@@ -46,7 +46,6 @@ void registerDependency() async {
   getIt.registerSingleton<IObserver>(Observer());
   getIt.registerSingleton<IChallangeService>(ChallangeService());
   getIt.registerSingleton<ILoggingService>(LoggingService());
- 
   getIt.registerLazySingleton<IPageRouterService>(() {
     IObserver observer = getIt.get<IObserver>();
     return PageRouterService(observer);
@@ -55,9 +54,7 @@ void registerDependency() async {
   getIt.registerSingleton<ISignatureService>(SignatureService());
   getIt.registerLazySingleton<IConfiguration>(() {
     IlocalStorage localStorage = getIt.get<IlocalStorage>();
-    var config = Configuration(storage: localStorage);
-    config.getConfig().then((value) => config.config = value);
-    return config;
+    return Configuration(storage: localStorage);
   });
   getIt.registerLazySingleton<ISecretManager>(
     () {
@@ -156,7 +153,7 @@ void registerDependency() async {
   getIt.registerLazySingleton<IExceptionManager>(
     () {
       ILoggingService loggingService = getIt.get<ILoggingService>();
- 
+
       return ExceptionManager(loggingService);
     },
   );
@@ -167,7 +164,6 @@ void registerDependency() async {
       return SessionService(localStorage);
     },
   );
- 
 }
 
 void registerFactory<T>(FactoryFunc<T> func) {
