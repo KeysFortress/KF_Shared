@@ -6,6 +6,7 @@ import 'package:application/implementations/http_provider.dart';
 import 'package:application/implementations/http_server.dart';
 import 'package:application/implementations/local_network_service.dart';
 import 'package:application/implementations/local_storage.dart';
+import 'package:application/implementations/logging_service.dart';
 import 'package:application/implementations/observer.dart';
 import 'package:application/implementations/otp_service.dart';
 import 'package:application/implementations/page_router_service.dart';
@@ -26,6 +27,7 @@ import 'package:infrastructure/interfaces/ihttp_server.dart';
 import 'package:infrastructure/interfaces/iidentity_manager.dart';
 import 'package:infrastructure/interfaces/ilocal_network_service.dart';
 import 'package:infrastructure/interfaces/ilocal_storage.dart';
+import 'package:infrastructure/interfaces/ilogging_service.dart';
 import 'package:infrastructure/interfaces/iobserver.dart';
 import 'package:infrastructure/interfaces/iotp_service.dart';
 import 'package:infrastructure/interfaces/ipage_router_service.dart';
@@ -39,9 +41,9 @@ import 'package:infrastructure/interfaces/itoken_service.dart';
 GetIt getIt = GetIt.I;
 void registerDependency() async {
   getIt.registerSingleton<IHttpProviderService>(HttpProvider());
-  getIt.registerSingleton<IExceptionManager>(ExceptionManager());
   getIt.registerSingleton<IObserver>(Observer());
   getIt.registerSingleton<IChallangeService>(ChallangeService());
+  getIt.registerSingleton<ILoggingService>(LoggingService());
 
   getIt.registerLazySingleton<IPageRouterService>(() {
     IObserver observer = getIt.get<IObserver>();
@@ -145,6 +147,12 @@ void registerDependency() async {
       IlocalStorage storage = getIt.get<IlocalStorage>();
 
       return DeviceService(storage);
+    },
+  );
+  getIt.registerLazySingleton<IExceptionManager>(
+    () {
+      ILoggingService loggingService = getIt.get<ILoggingService>();
+      return ExceptionManager(loggingService);
     },
   );
 }
