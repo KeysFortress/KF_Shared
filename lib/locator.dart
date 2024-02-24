@@ -146,8 +146,9 @@ void registerDependency() async {
   getIt.registerLazySingleton<IDevicesService>(
     () {
       IlocalStorage storage = getIt.get<IlocalStorage>();
+      IHttpProviderService providerService = getIt.get<IHttpProviderService>();
 
-      return DeviceService(storage);
+      return DeviceService(storage, providerService);
     },
   );
   getIt.registerLazySingleton<IExceptionManager>(
