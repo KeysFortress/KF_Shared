@@ -11,6 +11,7 @@ import 'package:application/implementations/observer.dart';
 import 'package:application/implementations/otp_service.dart';
 import 'package:application/implementations/page_router_service.dart';
 import 'package:application/implementations/secret_manager.dart';
+import 'package:application/implementations/session_service.dart';
 import 'package:application/implementations/signature_service.dart';
 import 'package:application/implementations/identity_manager.dart';
 import 'package:application/implementations/signature_store.dart';
@@ -32,6 +33,7 @@ import 'package:infrastructure/interfaces/iobserver.dart';
 import 'package:infrastructure/interfaces/iotp_service.dart';
 import 'package:infrastructure/interfaces/ipage_router_service.dart';
 import 'package:infrastructure/interfaces/isecret_manager.dart';
+import 'package:infrastructure/interfaces/isession_service.dart';
 import 'package:infrastructure/interfaces/isignature_service.dart';
 import 'package:infrastructure/interfaces/isignature_store.dart';
 import 'package:infrastructure/interfaces/iauthentication_service.dart';
@@ -44,12 +46,11 @@ void registerDependency() async {
   getIt.registerSingleton<IObserver>(Observer());
   getIt.registerSingleton<IChallangeService>(ChallangeService());
   getIt.registerSingleton<ILoggingService>(LoggingService());
-
+ 
   getIt.registerLazySingleton<IPageRouterService>(() {
     IObserver observer = getIt.get<IObserver>();
     return PageRouterService(observer);
   });
-
   getIt.registerSingleton<IlocalStorage>(LocalStorage());
   getIt.registerSingleton<ISignatureService>(SignatureService());
   getIt.registerLazySingleton<IConfiguration>(() {
@@ -58,7 +59,6 @@ void registerDependency() async {
     config.getConfig().then((value) => config.config = value);
     return config;
   });
-
   getIt.registerLazySingleton<ISecretManager>(
     () {
       IlocalStorage storage = getIt.get<IlocalStorage>();
@@ -67,7 +67,6 @@ void registerDependency() async {
       );
     },
   );
-
   getIt.registerLazySingleton<IIdentityManager>(
     () {
       IlocalStorage storage0 = getIt.get<IlocalStorage>();
@@ -78,21 +77,18 @@ void registerDependency() async {
       );
     },
   );
-
   getIt.registerLazySingleton<ISignatureStore>(
     () {
       IlocalStorage storage1 = getIt.get<IlocalStorage>();
       return SignatureStore(storage1);
     },
   );
-
   getIt.registerLazySingleton<IAuthenticationService>(
     () {
       IHttpProviderService provider = getIt.get<IHttpProviderService>();
       return AuthenticationService(provider);
     },
   );
-
   getIt.registerLazySingleton<IOtpService>(
     () {
       IlocalStorage storage2 = getIt.get<IlocalStorage>();
@@ -100,7 +96,6 @@ void registerDependency() async {
       return OtpService(storage2);
     },
   );
-
   getIt.registerLazySingleton<IAuthorizationService>(
     () {
       IlocalStorage storage = getIt.get<IlocalStorage>();
@@ -116,6 +111,7 @@ void registerDependency() async {
       ISignatureService signatureService = getIt.get<ISignatureService>();
       IChallangeService challangeService = getIt.get<IChallangeService>();
       ITokenService tokenService = getIt.get<ITokenService>();
+
       return HttpServer(
         localNetworkService,
         signatureService,
@@ -129,8 +125,16 @@ void registerDependency() async {
       IHttpProviderService httpService = getIt.get<IHttpProviderService>();
       ISignatureService signatureService = getIt.get<ISignatureService>();
       IlocalStorage localStorage = getIt.get<IlocalStorage>();
+      ISessionService sessionService = getIt.get<ISessionService>();
+      IDevicesService deviceService = getIt.get<IDevicesService>();
 
-      return LocalNetworkService(httpService, signatureService, localStorage);
+      return LocalNetworkService(
+        httpService,
+        signatureService,
+        localStorage,
+        sessionService,
+        deviceService,
+      );
     },
   );
   getIt.registerLazySingleton<ITokenService>(
@@ -152,9 +156,18 @@ void registerDependency() async {
   getIt.registerLazySingleton<IExceptionManager>(
     () {
       ILoggingService loggingService = getIt.get<ILoggingService>();
+ 
       return ExceptionManager(loggingService);
     },
   );
+  getIt.registerLazySingleton<ISessionService>(
+    () {
+      IlocalStorage localStorage = getIt.get<IlocalStorage>();
+
+      return SessionService(localStorage);
+    },
+  );
+ 
 }
 
 void registerFactory<T>(FactoryFunc<T> func) {
