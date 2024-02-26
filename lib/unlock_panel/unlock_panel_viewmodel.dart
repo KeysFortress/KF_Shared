@@ -37,10 +37,15 @@ class UnlockPanelViewModel extends PageViewModel {
         break;
       case DeviceLockType.none:
         // ignore: use_build_context_synchronously
-        router.changePage(
-          "/setup-lock",
-          pageContext,
-          TransitionData(next: PageTransition.slideForward),
+        Future.delayed(
+          const Duration(milliseconds: 500),
+          () {
+            router.changePage(
+              "/setup-lock",
+              pageContext,
+              TransitionData(next: PageTransition.slideForward),
+            );
+          },
         );
         break;
     }
