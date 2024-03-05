@@ -57,6 +57,8 @@ class UnlockPanelViewModel extends PageViewModel {
 
   Future requestBiometric() async {
     try {
+      await auth.stopAuthentication();
+
       var result = await auth.authenticate(
         localizedReason: 'Please authenticate to unlock the application',
         options: const AuthenticationOptions(useErrorDialogs: false),
@@ -73,8 +75,6 @@ class UnlockPanelViewModel extends PageViewModel {
         );
       }
     } on PlatformException catch (e) {
-      await auth.stopAuthentication();
-      await requestBiometric();
       if (e.code == auth_error.notEnrolled) {
         // Add handling of no hardware here.
       } else if (e.code == auth_error.lockedOut ||
