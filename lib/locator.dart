@@ -110,12 +110,20 @@ void registerDependency() async {
       ISignatureService signatureService = getIt.get<ISignatureService>();
       IChallangeService challangeService = getIt.get<IChallangeService>();
       ITokenService tokenService = getIt.get<ITokenService>();
+      ISecretManager secretManager = getIt.get<ISecretManager>();
+      IIdentityManager identityManager = getIt.get<IIdentityManager>();
+      IOtpService otpService = getIt.get<IOtpService>();
+      ISyncService syncService = getIt.get<ISyncService>();
 
       return HttpServer(
         localNetworkService,
         signatureService,
         challangeService,
         tokenService,
+        secretManager,
+        identityManager,
+        otpService,
+        syncService,
       );
     },
   );
