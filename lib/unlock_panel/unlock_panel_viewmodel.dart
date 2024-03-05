@@ -16,7 +16,6 @@ class UnlockPanelViewModel extends PageViewModel {
   late IAuthorizationService _authorizationService;
   final LocalAuthentication auth = LocalAuthentication();
   late IPageRouterService _routerService;
-  late IObserver _observer;
 
   Widget _lockOption = const Column();
   Widget get lockOption => _lockOption;
@@ -24,8 +23,6 @@ class UnlockPanelViewModel extends PageViewModel {
   UnlockPanelViewModel(super.context) {
     _authorizationService = getIt.get<IAuthorizationService>();
     _routerService = getIt.get<IPageRouterService>();
-    _observer = getIt.get<IObserver>();
-    _observer.subscribe("woken-up", ready);
   }
 
   ready() async {
@@ -84,12 +81,5 @@ class UnlockPanelViewModel extends PageViewModel {
         // ...
       }
     }
-  }
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    _observer.dispose("woken-up");
-    super.dispose();
   }
 }
