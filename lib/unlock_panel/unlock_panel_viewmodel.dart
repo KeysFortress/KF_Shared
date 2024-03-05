@@ -55,14 +55,14 @@ class UnlockPanelViewModel extends PageViewModel {
   Future requestBiometric() async {
     try {
       var result = await auth.authenticate(
-        localizedReason: 'Please authenticate to show account balance',
+        localizedReason: 'Please authenticate to unlock the application',
         options: const AuthenticationOptions(useErrorDialogs: false),
       );
 
       if (result) {
-        // ignore: use_build_context_synchronously
         router.changePage(
           "/passwords",
+          // ignore: use_build_context_synchronously
           pageContext,
           TransitionData(next: PageTransition.slideForward),
         );

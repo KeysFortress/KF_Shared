@@ -7,8 +7,6 @@ import 'package:stacked/stacked.dart';
 import 'package:shared/locator.dart' as locator;
 import 'package:infrastructure/interfaces/iauthorization_service.dart';
 
-import 'unlock_panel/unlock_panel_view.dart';
-
 class PageViewModel extends BaseViewModel {
   GetIt getIt = locator.getIt;
   late BuildContext pageContext;
