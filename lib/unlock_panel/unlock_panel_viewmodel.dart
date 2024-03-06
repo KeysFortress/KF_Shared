@@ -1,20 +1,15 @@
+import 'package:components/biometric_panel/biometric_panel.dart';
 import 'package:components/pattern_panel/pattern_panel.dart';
 import 'package:components/pin_code_panel/pin_code_panel.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:infrastructure/interfaces/iauthorization_service.dart';
-import 'package:infrastructure/interfaces/iobserver.dart';
 import 'package:infrastructure/interfaces/ipage_router_service.dart';
-import 'package:local_auth/local_auth.dart';
 import 'package:shared/page_view_model.dart';
-import 'package:local_auth/error_codes.dart' as auth_error;
 import 'package:domain/models/enums.dart';
-import 'package:domain/models/transition_data.dart';
 import 'package:components/fill_totp_code/fill_totp_code.dart';
 
 class UnlockPanelViewModel extends PageViewModel {
   late IAuthorizationService _authorizationService;
-  final LocalAuthentication auth = LocalAuthentication();
   late IPageRouterService _routerService;
 
   Widget _lockOption = const Column();
@@ -35,9 +30,8 @@ class UnlockPanelViewModel extends PageViewModel {
       case DeviceLockType.totp:
         _lockOption = const FillTotpCode();
         break;
-
       case DeviceLockType.biometric:
-        await requestBiometric();
+        _lockOption = const BiometricPanel();
         break;
       case DeviceLockType.none:
         // ignore: use_build_context_synchronously
@@ -50,36 +44,5 @@ class UnlockPanelViewModel extends PageViewModel {
         break;
     }
     notifyListeners();
-  }
-
-  Future requestBiometric() async {
-    try {
-      await auth.stopAuthentication();
-
-      var result = await auth.authenticate(
-        localizedReason: 'Please authenticate to unlock the application',
-        options: const AuthenticationOptions(useErrorDialogs: false),
-      );
-
-      if (result) {
-        _routerService.isLocked = false;
-
-        router.changePage(
-          "/passwords",
-          // ignore: use_build_context_synchronously
-          pageContext,
-          TransitionData(next: PageTransition.slideForward),
-        );
-      }
-    } on PlatformException catch (e) {
-      if (e.code == auth_error.notEnrolled) {
-        // Add handling of no hardware here.
-      } else if (e.code == auth_error.lockedOut ||
-          e.code == auth_error.permanentlyLockedOut) {
-        // ...
-      } else {
-        // ...
-      }
-    }
   }
 }
