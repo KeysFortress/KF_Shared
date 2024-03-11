@@ -61,8 +61,11 @@ void registerDependency() async {
   getIt.registerLazySingleton<ISecretManager>(
     () {
       IlocalStorage storage = getIt.get<IlocalStorage>();
+      IDevicesService devicesService = getIt.get<IDevicesService>();
+
       return SecretManger(
         localStorage: storage,
+        devicesService: devicesService,
       );
     },
   );
@@ -70,10 +73,9 @@ void registerDependency() async {
     () {
       IlocalStorage storage0 = getIt.get<IlocalStorage>();
       ISignatureService signatureService = getIt.get<ISignatureService>();
-      return IdentityManager(
-        signatureService,
-        storage0,
-      );
+      IDevicesService devicesService = getIt.get<IDevicesService>();
+
+      return IdentityManager(signatureService, storage0, devicesService);
     },
   );
   getIt.registerLazySingleton<ISignatureStore>(
@@ -91,8 +93,8 @@ void registerDependency() async {
   getIt.registerLazySingleton<IOtpService>(
     () {
       IlocalStorage storage2 = getIt.get<IlocalStorage>();
-
-      return OtpService(storage2);
+      IDevicesService devicesService = getIt.get<IDevicesService>();
+      return OtpService(storage2, devicesService);
     },
   );
   getIt.registerLazySingleton<IAuthorizationService>(
@@ -157,8 +159,8 @@ void registerDependency() async {
     () {
       IlocalStorage storage = getIt.get<IlocalStorage>();
       IHttpProviderService providerService = getIt.get<IHttpProviderService>();
-
-      return DeviceService(storage, providerService);
+      ISyncService syncService = getIt.get<ISyncService>();
+      return DeviceService(storage, providerService, syncService);
     },
   );
   getIt.registerLazySingleton<IExceptionManager>(
