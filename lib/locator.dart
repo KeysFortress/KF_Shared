@@ -50,22 +50,22 @@ void registerDependency() async {
   getIt.registerSingleton<ILoggingService>(LoggingService());
   getIt.registerLazySingleton<IPageRouterService>(() {
     IObserver observer = getIt.get<IObserver>();
+
     return PageRouterService(observer);
   });
   getIt.registerSingleton<IlocalStorage>(LocalStorage());
   getIt.registerSingleton<ISignatureService>(SignatureService());
   getIt.registerLazySingleton<IConfiguration>(() {
     IlocalStorage localStorage = getIt.get<IlocalStorage>();
+
     return Configuration(storage: localStorage);
   });
   getIt.registerLazySingleton<ISecretManager>(
     () {
       IlocalStorage storage = getIt.get<IlocalStorage>();
-      IDevicesService devicesService = getIt.get<IDevicesService>();
 
       return SecretManger(
         localStorage: storage,
-        devicesService: devicesService,
       );
     },
   );
@@ -73,14 +73,14 @@ void registerDependency() async {
     () {
       IlocalStorage storage0 = getIt.get<IlocalStorage>();
       ISignatureService signatureService = getIt.get<ISignatureService>();
-      IDevicesService devicesService = getIt.get<IDevicesService>();
 
-      return IdentityManager(signatureService, storage0, devicesService);
+      return IdentityManager(signatureService, storage0);
     },
   );
   getIt.registerLazySingleton<ISignatureStore>(
     () {
       IlocalStorage storage1 = getIt.get<IlocalStorage>();
+
       return SignatureStore(storage1);
     },
   );
@@ -93,8 +93,8 @@ void registerDependency() async {
   getIt.registerLazySingleton<IOtpService>(
     () {
       IlocalStorage storage2 = getIt.get<IlocalStorage>();
-      IDevicesService devicesService = getIt.get<IDevicesService>();
-      return OtpService(storage2, devicesService);
+
+      return OtpService(storage2);
     },
   );
   getIt.registerLazySingleton<IAuthorizationService>(
@@ -159,8 +159,8 @@ void registerDependency() async {
     () {
       IlocalStorage storage = getIt.get<IlocalStorage>();
       IHttpProviderService providerService = getIt.get<IHttpProviderService>();
-      ISyncService syncService = getIt.get<ISyncService>();
-      return DeviceService(storage, providerService, syncService);
+
+      return DeviceService(storage, providerService);
     },
   );
   getIt.registerLazySingleton<IExceptionManager>(
@@ -187,6 +187,7 @@ void registerDependency() async {
       ILocalNetworkService localNetwork = getIt.get<ILocalNetworkService>();
       IHttpProviderService httpProviderService =
           getIt.get<IHttpProviderService>();
+
       return SyncService(localStorage, secretManager, identityManager,
           otpService, sessionService, localNetwork, httpProviderService);
     },
