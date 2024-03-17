@@ -4,20 +4,21 @@ import 'package:components/pin_code_panel/pin_code_panel.dart';
 import 'package:domain/exceptions/base_exception.dart';
 import 'package:flutter/material.dart';
 import 'package:infrastructure/interfaces/iauthorization_service.dart';
-import 'package:infrastructure/interfaces/ipage_router_service.dart';
 import 'package:shared/page_view_model.dart';
 import 'package:domain/models/enums.dart';
 
 class UnlockPanelViewModel extends PageViewModel {
   late IAuthorizationService _authorizationService;
-  late IPageRouterService _routerService;
+
+  bool _isWrongToken = false;
+  bool get isWrongPassword => _isWrongToken;
 
   Widget _lockOption = const Column();
   Widget get lockOption => _lockOption;
 
   UnlockPanelViewModel(super.context) {
     _authorizationService = getIt.get<IAuthorizationService>();
-    _routerService = getIt.get<IPageRouterService>();
+    observer.subscribe("unlock_failed", onUnlockFailed);
   }
 
   ready() async {
@@ -44,5 +45,21 @@ class UnlockPanelViewModel extends PageViewModel {
         throw BaseException(context: pageContext, message: "Not implemented");
     }
     notifyListeners();
+  }
+
+  onTryAgain() {
+    _isWrongToken = false;
+    notifyListeners();
+  }
+
+  onUnlockFailed() {
+    _isWrongToken = true;
+    notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    observer.dispose("unlock_failed");
+    super.dispose();
   }
 }
