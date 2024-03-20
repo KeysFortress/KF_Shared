@@ -19,6 +19,9 @@ class UnlockPanelView extends StatelessWidget {
                   height: 350,
                   child: AuthenticationFailed(
                     onTryAgain: viewModel.onTryAgain,
+                    remainingAttempts: viewModel.isSelfDestructEnabled
+                        ? viewModel.remainingAttempts
+                        : null,
                   ),
                 ),
               ],
