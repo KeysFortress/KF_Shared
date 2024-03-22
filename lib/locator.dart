@@ -1,4 +1,5 @@
 import 'package:application/implementations/autherization_service.dart';
+import 'package:application/implementations/certificate_service.dart';
 import 'package:application/implementations/configuration.dart';
 import 'package:application/implementations/device_service.dart';
 import 'package:application/implementations/exception_manager.dart';
@@ -21,6 +22,7 @@ import 'package:application/implementations/token_service.dart';
 import 'package:application/implementations/sync_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:infrastructure/interfaces/iauthorization_service.dart';
+import 'package:infrastructure/interfaces/icertificate_service.dart';
 import 'package:infrastructure/interfaces/iconfiguration.dart';
 import 'package:infrastructure/interfaces/idevices_service.dart';
 import 'package:infrastructure/interfaces/iexception_manager.dart';
@@ -116,7 +118,7 @@ void registerDependency() async {
       IIdentityManager identityManager = getIt.get<IIdentityManager>();
       IOtpService otpService = getIt.get<IOtpService>();
       ISyncService syncService = getIt.get<ISyncService>();
-
+      ICertificateService certificateService = getIt.get<ICertificateService>();
       return HttpServer(
         localNetworkService,
         signatureService,
@@ -126,6 +128,7 @@ void registerDependency() async {
         identityManager,
         otpService,
         syncService,
+        certificateService,
       );
     },
   );
@@ -190,6 +193,12 @@ void registerDependency() async {
 
       return SyncService(localStorage, secretManager, identityManager,
           otpService, sessionService, localNetwork, httpProviderService);
+    },
+  );
+  getIt.registerLazySingleton<ICertificateService>(
+    () {
+      IlocalStorage localStorage = getIt.get<IlocalStorage>();
+      return CertificateService(localStorage);
     },
   );
 }
