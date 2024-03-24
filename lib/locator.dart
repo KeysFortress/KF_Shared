@@ -1,4 +1,5 @@
 import 'package:application/implementations/autherization_service.dart';
+import 'package:application/implementations/auto_fill_service.dart';
 import 'package:application/implementations/certificate_service.dart';
 import 'package:application/implementations/configuration.dart';
 import 'package:application/implementations/device_service.dart';
@@ -22,6 +23,7 @@ import 'package:application/implementations/token_service.dart';
 import 'package:application/implementations/sync_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:infrastructure/interfaces/iauthorization_service.dart';
+import 'package:infrastructure/interfaces/iautofill_service.dart';
 import 'package:infrastructure/interfaces/icertificate_service.dart';
 import 'package:infrastructure/interfaces/iconfiguration.dart';
 import 'package:infrastructure/interfaces/idevices_service.dart';
@@ -201,6 +203,12 @@ void registerDependency() async {
     () {
       IlocalStorage localStorage = getIt.get<IlocalStorage>();
       return CertificateService(localStorage);
+    },
+  );
+  getIt.registerLazySingleton<IAutoFillService>(
+    () {
+      IlocalStorage localStorage = getIt.get<IlocalStorage>();
+      return AutoFillService(localStorage);
     },
   );
 }
