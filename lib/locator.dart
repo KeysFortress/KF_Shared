@@ -119,6 +119,7 @@ void registerDependency() async {
       IOtpService otpService = getIt.get<IOtpService>();
       ISyncService syncService = getIt.get<ISyncService>();
       ICertificateService certificateService = getIt.get<ICertificateService>();
+      IObserver observer = getIt.get<IObserver>();
       return HttpServer(
         localNetworkService,
         signatureService,
@@ -129,6 +130,7 @@ void registerDependency() async {
         otpService,
         syncService,
         certificateService,
+        observer,
       );
     },
   );
