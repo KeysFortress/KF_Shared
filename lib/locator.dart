@@ -21,6 +21,7 @@ import 'package:application/implementations/authentication_service.dart';
 import 'package:application/implementations/challanage_service.dart';
 import 'package:application/implementations/token_service.dart';
 import 'package:application/implementations/sync_service.dart';
+import 'package:application/implementations/cloud_connection_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:infrastructure/interfaces/iauthorization_service.dart';
 import 'package:infrastructure/interfaces/iautofill_service.dart';
@@ -45,6 +46,7 @@ import 'package:infrastructure/interfaces/iauthentication_service.dart';
 import 'package:infrastructure/interfaces/ichallanage_service.dart';
 import 'package:infrastructure/interfaces/itoken_service.dart';
 import 'package:infrastructure/interfaces/isync_service.dart';
+import 'package:infrastructure/interfaces/icloud_service.dart';
 
 GetIt getIt = GetIt.I;
 void registerDependency() async {
@@ -107,6 +109,14 @@ void registerDependency() async {
       IOtpService otpService = getIt.get<IOtpService>();
 
       return AutherizationService(otpService, storage);
+    },
+  );
+  getIt.registerLazySingleton<ICloudService>(
+    () {
+      IlocalStorage storage = getIt.get<IlocalStorage>();
+      IHttpProviderService provider = getIt.get<IHttpProviderService>();
+      ISignatureService signatureService = getIt.get<ISignatureService>();
+      return CloudConnectionService(provider, storage, signatureService);
     },
   );
   getIt.registerLazySingleton<IHttpServer>(
